@@ -44,7 +44,7 @@ parts:
       export GOPATH=$(dirname $SNAPCRAFT_PART_INSTALL)/go
       mkdir -p $GOPATH
 
-      KUBEREPO="github.com/kubernetes/kubernetes"
+      KUBEREPO="github.com/juju-solutions/kubernetes"
       go get -d $KUBEREPO || true
 
       cd $GOPATH/src/$KUBEREPO
