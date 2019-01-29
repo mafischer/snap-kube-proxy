@@ -1,6 +1,5 @@
 name: kube-proxy
-architectures: ['amd64', 'arm64', 'ppc64el', 's390x']
-version: 1.13.2
+version: {{snap_version}}
 summary: Kubernetes network proxy runs on each node.
 description: |
   The Kubernetes network proxy runs on each node. This reflects services as
@@ -50,7 +49,7 @@ parts:
 
       cd $GOPATH/src/$KUBEREPO
 
-      git checkout tags/v1.13.2
+      git checkout tags/v{{snap_version}}
       make clean && make WHAT=cmd/kube-proxy
       cd $SNAPCRAFT_PART_INSTALL
       cp $GOPATH/src/$KUBEREPO/_output/bin/kube-proxy .
