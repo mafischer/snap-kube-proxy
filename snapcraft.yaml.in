@@ -30,7 +30,7 @@ parts:
     after:
       - wrappers
     build-snaps:
-      - go/1.11/stable
+      - go/1.12/stable
     build-packages:
       - mercurial
       - git
