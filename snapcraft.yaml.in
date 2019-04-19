@@ -20,8 +20,13 @@ apps:
     command: kube-proxy
 
 parts:
-  wrappers:
+  shared:
     source: shared
+    plugin: dump
+    organize:
+      '*': shared/
+  wrappers:
+    source: wrappers
     plugin: dump
     organize:
       '*': wrappers/
@@ -29,6 +34,7 @@ parts:
   kube-proxy:
     after:
       - wrappers
+      - shared
     build-snaps:
       - go/1.12/stable
     build-packages:
@@ -55,6 +61,7 @@ parts:
       cd $SNAPCRAFT_PART_INSTALL
       cp $GOPATH/src/$KUBEREPO/_output/bin/kube-proxy .
 
+      $SNAPCRAFT_PART_BUILD/shared/generate-configure-hook kube-proxy
+
       snapcraftctl build
 
-      ./shared/generate-configure-hook kube-proxy
