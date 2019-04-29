@@ -22,11 +22,13 @@ apps:
 parts:
   shared:
     source: shared
+    source-type: local
     plugin: dump
     organize:
       '*': shared/
   wrappers:
     source: wrappers
+    source-type: local
     plugin: dump
     organize:
       '*': wrappers/
