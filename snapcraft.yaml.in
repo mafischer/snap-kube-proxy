@@ -61,7 +61,7 @@ parts:
       git checkout tags/v{{snap_version}}
       {% if patches %}
       {% for patch in patches %}
-      git apply --stat {{patch}}
+      git apply --stat $SNAPCRAFT_PART_BUILD/{{patch}}
       {% endfor %}
       {% endif %}
       make clean && make WHAT=cmd/kube-proxy
