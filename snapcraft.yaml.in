@@ -59,6 +59,11 @@ parts:
       cd $GOPATH/src/$KUBEREPO
 
       git checkout tags/v{{snap_version}}
+      {% if patches %}
+      {% for patch in patches %}
+      git apply --stat {{patch}}
+      {% endfor %}
+      {% endif %}
       make clean && make WHAT=cmd/kube-proxy
       cd $SNAPCRAFT_PART_INSTALL
       cp $GOPATH/src/$KUBEREPO/_output/bin/kube-proxy .
