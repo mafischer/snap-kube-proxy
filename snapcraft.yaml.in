@@ -38,7 +38,7 @@ parts:
       - wrappers
       - shared
     build-snaps:
-      - go/1.12/stable
+      - {{go_version}}
     build-packages:
       - make
       - mercurial
