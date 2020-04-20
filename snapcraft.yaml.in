@@ -11,6 +11,7 @@ description: |
   must create a service with the apiserver API to configure the proxy.
 grade: stable
 confinement: classic
+base: core18
 
 apps:
   daemon:
