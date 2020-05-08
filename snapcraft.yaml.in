@@ -50,6 +50,7 @@ parts:
     plugin: dump
     build-attributes: [no-patchelf]
     source: .
+    source-type: local
     stage-packages:
       - conntrack
     override-build: |
