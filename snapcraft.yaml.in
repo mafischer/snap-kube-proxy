@@ -58,11 +58,10 @@ parts:
       mkdir -p $GOPATH
 
       KUBEREPO="github.com/kubernetes/kubernetes"
-      go get -d $KUBEREPO || true
+      git clone "https://$KUBEREPO" --branch v{{snap_version}} --depth 1 "$GOPATH/src/$KUBEREPO" || true
 
       cd $GOPATH/src/$KUBEREPO
 
-      git checkout tags/v{{snap_version}}
       {% if patches %}
       {% for patch in patches %}
       git apply --stat $SNAPCRAFT_PART_BUILD/{{patch}}
