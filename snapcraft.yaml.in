@@ -58,7 +58,8 @@ parts:
       mkdir -p $GOPATH
 
       KUBEREPO="github.com/kubernetes/kubernetes"
-      git clone "https://$KUBEREPO" --branch v{{snap_version}} --depth 1 "$GOPATH/src/$KUBEREPO" || true
+      rm -rf "$GOPATH/src/$KUBEREPO"
+      git clone "https://$KUBEREPO" --branch v{{snap_version}} --depth 1 "$GOPATH/src/$KUBEREPO"
 
       cd $GOPATH/src/$KUBEREPO
 
