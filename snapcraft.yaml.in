@@ -68,6 +68,7 @@ parts:
       git apply --stat $SNAPCRAFT_PART_BUILD/{{patch}}
       {% endfor %}
       {% endif %}
+      export FORCE_HOST_GO=y
       make clean && make WHAT=cmd/kube-proxy
       cd $SNAPCRAFT_PART_INSTALL
       cp $GOPATH/src/$KUBEREPO/_output/bin/kube-proxy .
