@@ -1,0 +1,75 @@
+name: kube-proxy
+version: 1.27.13
+summary: Kubernetes network proxy runs on each node.
+description: |
+  The Kubernetes network proxy runs on each node. This reflects services as
+  defined in the Kubernetes API on each node and can do simple TCP,UDP stream
+  forwarding or round robin TCP,UDP forwarding across a set of backends. Service
+  cluster ips and ports are currently found through Docker-links-compatible
+  environment variables specifying ports opened by the service proxy. There is
+  an optional addon that provides cluster DNS for these cluster IPs. The user
+  must create a service with the apiserver API to configure the proxy.
+grade: stable
+confinement: classic
+
+base: core20
+
+
+apps:
+  daemon:
+    command: wrappers/run-with-config-args wrappers/kube-proxy-wrapper
+    daemon: simple
+  kube-proxy:
+    command: kube-proxy
+
+parts:
+  shared:
+    source: shared
+    source-type: local
+    plugin: dump
+    organize:
+      '*': shared/
+  wrappers:
+    source: wrappers
+    source-type: local
+    plugin: dump
+    organize:
+      '*': wrappers/
+
+  kube-proxy:
+    after:
+      - wrappers
+      - shared
+    build-snaps:
+      - go/1.20/stable
+    build-packages:
+      - make
+      - mercurial
+      - git
+      - rsync
+    plugin: dump
+    build-attributes: [no-patchelf]
+    source: .
+    source-type: local
+    stage-packages:
+      - conntrack
+    override-build: |
+      export GOPATH=$(dirname $SNAPCRAFT_PART_INSTALL)/go
+      mkdir -p $GOPATH
+
+      KUBEREPO="github.com/kubernetes/kubernetes"
+      rm -rf "$GOPATH/src/$KUBEREPO"
+      git clone "https://$KUBEREPO" --branch v1.27.13 --depth 1 "$GOPATH/src/$KUBEREPO"
+
+      cd $GOPATH/src/$KUBEREPO
+
+      
+      export FORCE_HOST_GO=y
+      make clean && make WHAT=cmd/kube-proxy
+      cd $SNAPCRAFT_PART_INSTALL
+      cp $GOPATH/src/$KUBEREPO/_output/bin/kube-proxy .
+
+      $SNAPCRAFT_PART_BUILD/shared/generate-configure-hook kube-proxy
+
+      snapcraftctl build
+
